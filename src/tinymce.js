@@ -9,7 +9,7 @@ angular.module('ui.tinymce', [])
         return {
             require: 'ngModel',
             link: function (scope, elm, attrs, ngModel) {
-                var tinyInstance,userSetup;
+                var tinyInstance, userSetup;
 
                 // generate an ID if not present
                 if (!attrs.id) {
@@ -19,7 +19,7 @@ angular.module('ui.tinymce', [])
                 // update model when tinymce value changes.
                 var updateView = function () {
                     ngModel.$setViewValue(elm.val());
-                    if (!scope.$root.$$phase) {
+                    if (!scope.$$phase) {
                         scope.$apply();
                     }
                 };
@@ -27,7 +27,7 @@ angular.module('ui.tinymce', [])
                 // hook our setup functions into the tinymce config.
                 var getOptions = function () {
                     var expression = attrs.uiTinymce ? scope.$eval(attrs.uiTinymce) : {};
-                    if(expression.setup){
+                    if (expression.setup) {
                         userSetup = expression.setup;
                         delete expression.setup;
                     }
@@ -57,35 +57,34 @@ angular.module('ui.tinymce', [])
                                 }
                             });
                             if (userSetup) {
-                                userSetup.apply(scope,[ed]);
+                                userSetup.apply(scope, [ed]);
                             }
                         },
                         mode: 'exact',
                         elements: attrs.id
                     };
-                    return angular.extend(options, uiTinymceConfig, expression);
+                    var result =  angular.extend(options, uiTinymceConfig, expression);
+                    if(userSetup) expression.setup = userSetup;
+                    return result;
                 };
+
+                setTimeout(function () {
+                    tinymce.init(getOptions());
+                });
 
                 var initTinymceWidget = function (options) {
-                    // Update tinymce content when model is updated
-                    ngModel.$render = function () {
-                        if (!tinyInstance) {
-                            tinyInstance = tinymce.get(attrs.id);
-                        }
-                        if (tinyInstance) {
-                            tinyInstance.setContent(ngModel.$viewValue || '');
-                        }
-                    };
-
-                    // Create the new tinymce widget
-                    tinymce.init(options);
-
-                    // Force a render to override whatever is in the textarea
-                    ngModel.$render();
+                    if (!tinyInstance) {
+                        tinyInstance = tinymce.get(attrs.id);
+                    }
+                    if (tinyInstance) {
+                        tinyInstance.setContent(ngModel.$viewValue || '');
+                    }
                 };
+
 
                 // Watch for changes to the directive options
                 scope.$watch(getOptions, initTinymceWidget, true);
             }
         };
     }]);
+
