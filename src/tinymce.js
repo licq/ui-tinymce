@@ -9,7 +9,7 @@ angular.module('ui.tinymce', [])
         return {
             require: 'ngModel',
             link: function (scope, elm, attrs, ngModel) {
-                var tinyInstance;
+                var tinyInstance,userSetup;
 
                 // generate an ID if not present
                 if (!attrs.id) {
@@ -27,6 +27,10 @@ angular.module('ui.tinymce', [])
                 // hook our setup functions into the tinymce config.
                 var getOptions = function () {
                     var expression = attrs.uiTinymce ? scope.$eval(attrs.uiTinymce) : {};
+                    if(expression.setup){
+                        userSetup = expression.setup;
+                        delete expression.setup;
+                    }
 
                     var options = {
                         // Update model when calling setContent (such as from the source editor popup)
@@ -52,9 +56,8 @@ angular.module('ui.tinymce', [])
                                     updateView();
                                 }
                             });
-                            if (expression.setup) {
-                                scope.$eval(expression.setup);
-                                delete expression.setup;
+                            if (userSetup) {
+                                userSetup.apply(scope,[ed]);
                             }
                         },
                         mode: 'exact',
