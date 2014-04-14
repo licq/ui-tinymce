@@ -61,44 +61,44 @@ describe('uiTinymce', function () {
             });
         });
     });
-    /*
-     describe('setting a value to the model', function () {
-     it('should update the editor', function() {
-     compile();
-     runs(function () {
-     scope.$apply(function() {
-     scope.foo = text;
-     });
-     expect(tinymce.get('foo').getContent()).toEqual(text);
-     });
-     });
-     it('should handle undefined gracefully', function() {
-     compile();
-     runs(function () {
-     scope.$apply(function() {
-     scope.foo = undefined;
-     });
-     expect(tinymce.get('foo').getContent()).toEqual('');
-     });
-     });
-     it('should handle null gracefully', function() {
-     compile();
-     runs(function () {
-     scope.$apply(function() {
-     scope.foo = null;
-     });
-     expect(tinymce.get('foo').getContent()).toEqual('');
-     });
-     });
-     });
-     describe('using the editor', function () {
-     it('should update the model', function() {
-     compile();
-     runs(function () {
-     tinymce.get('foo').setContent(text);
-     expect(scope.foo).toEqual(text);
-     });
-     });
-     });
-     */
+
+    describe('setting a value to the model', function () {
+        it('should update the editor', function () {
+            compile();
+            runs(function () {
+                scope.$apply(function () {
+                    scope.foo = text;
+                });
+                expect(tinymce.get('foo').getContent()).toEqual(text);
+            });
+        });
+        it('should handle undefined gracefully', function () {
+            compile();
+            runs(function () {
+                scope.$apply(function () {
+                    scope.foo = undefined;
+                });
+                expect(tinymce.get('foo').getContent()).toEqual('');
+            });
+        });
+        it('should handle null gracefully', function () {
+            compile();
+            runs(function () {
+                scope.$apply(function () {
+                    scope.foo = null;
+                });
+                expect(tinymce.get('foo').getContent()).toEqual('');
+            });
+        });
+    });
+    describe('using the editor', function () {
+        it('should update the model', function () {
+            compile();
+            runs(function () {
+                tinymce.get('foo').setContent(text);
+                expect(scope.foo).toEqual(text);
+            });
+        });
+    });
+
 });
